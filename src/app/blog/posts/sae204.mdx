@@ -1,7 +1,65 @@
 ---
 title: "SAE2.04 Integrative Project"
 publishedAt: "2024-06-28"
-summary: ""
+summary: "This project is a summary about all I learn in the first year of my B-Tech of Networking and Telecommunication"
 tag: "IUT"
 ---
 
+## Project Description
+
+This Project was carried out as part of our training at the IUT of Colmar. It consists of several parts: web development with Django and Nginx, data collection via MQTT, and network configuration with a switch and router.
+
+## Web Part: Django and Nginx
+
+### Django Project Creation
+
+- **Virtual Environment**: Set up a Python virtual environment to manage project dependencies.
+- **Database Configuration**: Used MySQL with Django to store sensor data.
+- **Models and Migrations**: Created Django models and executed migrations to structure the database.
+- **Features**:
+  - Read, update, and delete sensors.
+  - Filters for data by day, hour, and temperature.
+  - Export data to CSV.
+
+### Deployment with Gunicorn and Nginx
+
+- **Gunicorn Configuration**: Set up Gunicorn to serve the Django application.
+- **Nginx Configuration**: Configured Nginx to serve static files and proxy requests to Gunicorn.
+
+## Data Collection Part: MQTT
+
+### Understanding and Connecting MQTT
+
+- **MQTT Broker**: Connected to the broker `test.mosquitto.org` to receive sensor data.
+- **Message Processing**: Separated and processed MQTT messages to extract sensor information.
+
+### Database Management
+
+- **Sensor Verification**: Checked the existence of sensors in the database before insertion.
+- **Data Insertion**: Inserted sensor data into the MySQL database.
+
+## Network Part: Switch and Router
+
+### Switch Configuration
+
+- **VLANs**: Configured 4 VLANs (VLAN 10, VLAN 20, VLAN 30, VLAN 40).
+- **Trunk Mode**: Configured trunk mode to allow communication between VLANs.
+
+### Router Configuration
+
+- **Virtual Interfaces**: Configured virtual interfaces for each VLAN with different subnets.
+- **NAT Overload**: Configured NAT overload to allow communication between the local network and the public network.
+- **DHCP**: Configured DHCP pools for each VLAN.
+- **ACLs**: Configured Access Control Lists (ACLs) to define network traffic rules.
+
+## Skills Acquired
+
+- **Web Development**: Used Django to create a web application.
+- **Database Management**: Configured and managed MySQL with Django.
+- **Application Deployment**: Used Gunicorn and Nginx to deploy a web application.
+- **MQTT Protocol**: Connected and processed data via MQTT.
+- **Network Configuration**: Configured switches and routers, managed VLANs, NAT, DHCP, and ACLs.
+
+## Conclusion
+
+This SAE Integrative Project allowed us to put into practice various skills in web development, database management, application deployment, and network configuration. It was an excellent opportunity to apply the knowledge acquired in class and to work as a team on a complete and integrated project.
