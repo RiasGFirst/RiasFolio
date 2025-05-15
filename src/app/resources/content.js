@@ -160,7 +160,7 @@ const home = {
 
 const blog = {
   path: "/blog",
-  label: "Blog",
+  label: "Projects",
   title: "My Projects...",
   description: `Read what ${person.name} has been up to recently`,
   // Create new blog posts by adding a new .mdx file to app/blog/posts

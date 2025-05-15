@@ -3,9 +3,9 @@ const baseURL = "https://portfolio.riasnetwork.com";
 
 const routes = {
   "/": true,
-  "/work": true,
+  "/work": false,
   "/blog": true,
-  "/gallery": true,
+  "/gallery": false,
 };
 
 // Enable password protection on selected routes
@@ -93,7 +93,7 @@ const effects = {
 const display = {
   location: true,
   time: true,
-  themeSwitcher: true
+  themeSwitcher: false
 };
 
 const mailchimp = {
