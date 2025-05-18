@@ -214,27 +214,27 @@ export default function Home() {
                         </Text>
                       ))}
                     </Column>
-                    {experience.images.length > 0 && (
+                    {/* {experience.images.length > 0 && (
                       <Flex fillWidth paddingTop="m" paddingLeft="40" wrap>
                         {experience.images.map((image, index) => (
-                          <Flex
-                            key={index}
-                            border="neutral-medium"
-                            radius="m"
-                            minWidth={image.width}
-                            height={image.height}
-                          >
-                            <SmartImage
-                              enlarge
-                              radius="m"
-                              sizes={image.width.toString()}
-                              alt={image.alt}
-                              src={image.src}
-                            />
-                          </Flex>
+                          // <Flex
+                          //   key={index}
+                          //   border="neutral-medium"
+                          //   radius="m"
+                          //   minWidth={image.width}
+                          //   height={image.height}
+                          // >
+                          //   <SmartImage
+                          //     enlarge
+                          //     radius="m"
+                          //     sizes={image.width.toString()}
+                          //     alt={image.alt}
+                          //     src={image.src}
+                          //   />
+                          // </Flex>
                         ))}
                       </Flex>
-                    )}
+                    )} */}
                   </Column>
                 ))}
               </Column>
@@ -271,7 +271,7 @@ export default function Home() {
                       {skill.title}
                     </Text>
                     <Text variant="body-default-m">{skill.description}</Text>
-                    {skill.images.length > 0 && (
+                    {/* {skill.images.length > 0 && (
                       <Flex fillWidth paddingTop="m" paddingLeft="40" wrap>
                         {skill.images.map((image, index) => (
                           <Flex
@@ -291,7 +291,7 @@ export default function Home() {
                           </Flex>
                         ))}
                       </Flex>
-                    )}
+                    )} */}
                   </Column>
                 ))}
               </Column>
