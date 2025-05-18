@@ -144,6 +144,24 @@ export const Header = () => {
                   />
                 </>
               )}
+
+              {/* {routes["/document"] && (
+                <>
+                  <ToggleButton
+                    className="s-flex-hide"
+                    prefixIcon="document"
+                    href="/document"
+                    label={document.label}
+                    selected={pathname.startsWith("/document")}
+                  />
+                  <ToggleButton
+                    className="s-flex-show"
+                    prefixIcon="document"
+                    href="/document"
+                    selected={pathname.startsWith("/document")}
+                  />
+                </>
+              )} */}
               {display.themeSwitcher && (
                 <>
                   <Line background="neutral-alpha-medium" vert maxHeight="24" />

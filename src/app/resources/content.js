@@ -1,4 +1,5 @@
 import { Logo } from "@/once-ui/components";
+import { baseURL } from "./config";
 
 const person = {
   firstName: "Marcelin",
@@ -8,7 +9,7 @@ const person = {
   },
   role: "Student in IT",
   avatar: "/images/avatar.jpg",
-  email: "example@example.com",
+  email: "marcelin.trag@uha.fr",
   location: "Europe/Paris", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
   languages: ["French", "English", "German"], // optional: Leave the array empty if you don't want to display languages
 };
@@ -38,15 +39,10 @@ const social = [
     link: "https://www.linkedin.com/in/marcelin-trag-a139252b9/",
   },
   {
-    name: "X",
-    icon: "x",
-    link: "",
-  },
-  {
     name: "Email",
     icon: "email",
     link: `mailto:${person.email}`,
-  },
+  }
 ];
 
 const home = {
@@ -156,12 +152,38 @@ const home = {
       },
     ],
   },
+  document: {
+    display: true,
+    title: "Documents",
+    docs: [
+      {
+        title: "French CV",
+        description: <>Click the button bellow to obtain my French CV</>,
+        files: [
+          {
+            src: "/documents/CV_FR_MarcelinTRAG.pdf",
+            alt: "CV French",
+          }
+        ]
+      },
+      {
+        title: "English CV",
+        description: <>Click the button bellow to obtain my English CV</>,
+        files: [
+          {
+            src: "/documents/CV_EN_MarcelinTRAG.pdf",
+            alt: "CV English",
+          }
+        ]
+      },
+    ]
+  }
 };
 
 const blog = {
   path: "/blog",
   label: "Projects",
-  title: "My Projects...",
+  title: "My Projects",
   description: `Read what ${person.name} has been up to recently`,
   // Create new blog posts by adding a new .mdx file to app/blog/posts
   // All posts will be listed on the /blog route

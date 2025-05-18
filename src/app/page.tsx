@@ -297,6 +297,38 @@ export default function Home() {
               </Column>
             </>
           )}
+
+          {home.document.display && (
+            <>
+              <Heading as="h2" id={home.document.title} variant="display-strong-s" marginBottom="m">
+                {home.document.title}
+              </Heading>
+              <Column fillWidth gap="l" marginBottom="40">
+                {home.document.docs.map((doc, index) => (
+                  <Column key={`${doc.title}-${index}`} fillWidth gap="8">
+                    <Text id={doc.title} variant="heading-strong-l">
+                      {doc.title}
+                    </Text>
+                    <Text variant="body-default-m">{doc.description}</Text>
+                    {doc.files.length > 0 && (
+                      <Flex fillWidth paddingTop="xs" wrap>
+                        {doc.files.map((file, index) => (
+                          <Button
+                            key={index}
+                            href={file.src}
+                            target="_blank"
+                            download
+                            size="m"
+                            label="Download"
+                          />
+                        ))}
+                      </Flex>
+                    )}
+                  </Column>
+                ))}
+              </Column>
+            </>
+          )}
         </Column>
       </Flex>
     </Column>

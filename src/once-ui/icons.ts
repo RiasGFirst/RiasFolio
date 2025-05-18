@@ -38,6 +38,8 @@ import {
 
 import { FaDiscord, FaGithub, FaLinkedin, FaX } from "react-icons/fa6";
 
+import { LiaFlagUsaSolid } from "react-icons/lia";
+
 export const iconLibrary: Record<string, IconType> = {
   chevronUp: HiChevronUp,
   chevronDown: HiChevronDown,
@@ -73,6 +75,7 @@ export const iconLibrary: Record<string, IconType> = {
   moon: HiMoon,
   sun: HiSun,
   document: HiOutlineDocument,
+  flagusa: LiaFlagUsaSolid
 };
 
 export type IconLibrary = typeof iconLibrary;
