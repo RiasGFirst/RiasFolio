@@ -1,8 +1,8 @@
 ---
 title: "Building a Homelab"
 publishedAt: "2024-10-01"
-summary: ""
-tag: "Personnal"
+summary: "An overview of my personal network and virtualization infrastructure."
+tag: "Personal"
 ---
 
 # My Network and Virtualization Infrastructure
@@ -25,7 +25,7 @@ On my Proxmox server, I host several services, including:
 - **Immich**: This serves as my personal image cloud storage, allowing me to securely store and manage my photo library.
 - **Authentik**: This tool helps me create and administer accounts for all my applications, providing a centralized authentication and identity management system.
 - **Pterodactyl**: A web application to manage game servers. This service runs on a dedicated public IP to ensure optimal performance and reliability.
-- **More apps**: Oter apps can be added and use.
+- **More apps**: Other apps can be added and used.
 
 ## MikroTik
 
@@ -37,9 +37,29 @@ MikroTik is a Latvian company known for its networking solutions. I use a MikroT
 
 With MikroTik, I have configured several advanced features, including:
 
-- **EOIP Tunnel**: To bring up two public IP addresses so i can manage access to my self-hosted apps beond my local network.
+- **EOIP Tunnel**: To bring up two public IP addresses so I can manage access to my self-hosted apps beyond my local network.
 - **Traffic Management**: To prioritize certain types of traffic and ensure optimal quality of service.
 - **Security**: To protect my network from intrusions and attacks.
+
+## Network and Transit Management
+
+### Overview
+
+Effective network and transit management are crucial for ensuring seamless connectivity and optimal performance across different networks. This involves managing how data travels between my local network and external networks, including the internet.
+
+### Interconnection Management
+
+Interconnection management is about handling the connections between different networks to ensure efficient and reliable data transfer. Here are some key aspects of my interconnection management strategy:
+
+- **Peering**: Establishing direct connections with other networks to exchange traffic. This reduces latency and improves bandwidth efficiency. I use peering to connect with local internet service providers and content delivery networks.
+
+- **Transit Providers**: Using transit providers to reach parts of the internet not covered by peering agreements. This ensures global connectivity and access to all internet resources.
+
+- **Redundancy**: Implementing redundant connections to ensure high availability. This means having multiple paths for data to travel, so if one path fails, traffic can be rerouted through another path without disruption.
+
+- **Monitoring and Optimization**: Continuously monitoring network performance and optimizing routes to ensure the best possible performance. This includes using tools to analyze traffic patterns and make adjustments as needed.
+
+By focusing on these areas, I can ensure that my network is robust, reliable, and capable of handling the demands of my personal and professional projects.
 
 ## Conclusion
 
