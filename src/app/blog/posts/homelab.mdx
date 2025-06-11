@@ -45,21 +45,22 @@ With MikroTik, I have configured several advanced features, including:
 
 ### Overview
 
-Effective network and transit management are crucial for ensuring seamless connectivity and optimal performance across different networks. This involves managing how data travels between my local network and external networks, including the internet.
+In my homelab setup, managing network connections and transit is crucial for ensuring reliable and efficient access to external resources. One key aspect of this management involves establishing and maintaining connections with service providers to obtain and utilize public IP addresses.
 
-### Interconnection Management
+### Provider Connectivity
 
-Interconnection management is about handling the connections between different networks to ensure efficient and reliable data transfer. Here are some key aspects of my interconnection management strategy:
+I manage a dedicated connection to a service provider, which allows me to procure a block of public IP addresses. These IP addresses are essential for various applications, including hosting services and managing external access to my self-hosted applications.
 
-- **Peering**: Establishing direct connections with other networks to exchange traffic. This reduces latency and improves bandwidth efficiency. I use peering to connect with local internet service providers and content delivery networks.
+### Bandwidth Management
 
-- **Transit Providers**: Using transit providers to reach parts of the internet not covered by peering agreements. This ensures global connectivity and access to all internet resources.
+Effective bandwidth management is critical to ensure optimal performance and cost-efficiency. I monitor and manage my bandwidth usage with a focus on the 95th percentile billing method. This approach involves:
 
-- **Redundancy**: Implementing redundant connections to ensure high availability. This means having multiple paths for data to travel, so if one path fails, traffic can be rerouted through another path without disruption.
+- **Traffic Monitoring**: Continuously tracking bandwidth usage to understand traffic patterns and peak usage times.
+- **Commitment Management**: Ensuring that my bandwidth commitments align with the 95th percentile usage to optimize costs and avoid over-provisioning.
+- **Performance Optimization**: Adjusting network configurations and traffic policies to maintain high performance and reliability.
 
-- **Monitoring and Optimization**: Continuously monitoring network performance and optimizing routes to ensure the best possible performance. This includes using tools to analyze traffic patterns and make adjustments as needed.
+By carefully managing my connection to the service provider and focusing on efficient bandwidth usage, I can ensure that my network remains robust, scalable, and capable of supporting my various projects and services.
 
-By focusing on these areas, I can ensure that my network is robust, reliable, and capable of handling the demands of my personal and professional projects.
 
 ## Conclusion
 
