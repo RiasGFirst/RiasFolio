@@ -1,0 +1,66 @@
+---
+title: "SAE5.01 Design, implement, and present a technical solution"
+publishedAt: "2025-10-18"
+summary: ""
+tag: "IUT"
+---
+# Project: Connected Vehicle Tracking System (IoT / LoRaWAN)
+
+## Context and Objectives
+As part of the SAE 5.01 module in the Networks and Telecommunications BUT (IUT of Colmar), I participated in the design, implementation, and presentation of a complete Internet of Things (IoT) technical solution.
+
+The main objective was to develop a GNSS vehicle tracking system capable of transmitting its position via the LoRaWAN network (The Things Network) and visualizing the data on a map hosted on a server. This project addressed a strong energy efficiency constraint to guarantee the autonomy of the embedded system.
+
+## Technical Architecture Implemented
+
+### 1. Embedded System (End-Device)
+For data capture and transmission, we developed a solution based on the Pycom hardware environment:
+
+* **Hardware:** Used a Fipy or Lopy module mounted on a Pytrack board embedded in the vehicle.
+* **Energy Optimization:** Developed a power management algorithm using "Deep Sleep" modes. The system only activates and connects to the network when the accelerometer detects vehicle movement.
+* **Data Optimization:** Optimized encoding of latitude and longitude on 3 bytes each to reduce Airtime on the LoRa physical layer.
+
+### 2. Network Infrastructure and Transmission
+Data transport relies on the LoRaWAN protocol via The Things Network (TTN) infrastructure:
+
+* Configuration of a LoRaWAN Gateway (based on Expansion or Pysens board) to ensure network coverage.
+* Payload management (Uplink/Downlink) and JSON formatting via TTN "Payload Formatters".
+* Implementation of bidirectional communications (Downlink) allowing the user to remotely put the sensor to sleep via a Web command.
+
+### 3. Server Application and Visualization
+Data processing and display are centralized on a Raspberry Pi:
+
+* Deployment of a Node-RED flow to retrieve data via the MQTT protocol.
+* Creation of a dashboard integrating mapping for real-time tracking.
+* Integration of an alert system via SMS (using a 2G/3G dongle) and mobile notifications to warn the user during vehicle movements.
+
+![](/images/projects/sae501/LoRaWAN-cover.png)
+![](/images/projects/sae501/mqtt-logo.png)
+
+## Achievements
+
+This project allowed me to mobilize and validate the following key skills from the R&T curriculum:
+
+### Administer and Deploy (Networks and Telecoms)
+* **AC32.01 | Deploy a communication system for the enterprise:** Complete implementation of the IoT communication chain, from sensor to application server.
+* **AC32.02 | Deploy a wireless access network [...]:** Configuration of WiFi connections for the Gateway and management of the LoRaWAN radio link.
+* **AC32.03 | Deploy a fixed or mobile access network for an operator:** Configuration and provisioning of equipment on The Things Network (TTN) operator network.
+
+### Connect and Program (Development and System)
+* **AC33.01 | Develop technical specifications:** Analysis of autonomy needs and definition of data frame format.
+* **AC33.04 | Deploy and maintain an IT solution:** Installation and configuration of the Node-RED server on Raspberry Pi and maintenance of Python scripts (MicroPython) on Pycom modules.
+* **AC33.05 | Stay informed about technological developments:** Self-training on LoRaWAN protocol specifics, "Duty Cycle" constraints, and the Pycom environment.
+
+### Secure and Supervise
+* **AC31.01 | Design a network project [...] integrating supervision:** Implementation of a supervision dashboard to visualize vehicle status and position in real-time.
+* **AC31.03 | Create a demonstration prototype of the project:** Functional prototyping including embedded hardware and final user interface.
+
+### Project Management and Communication
+* **AC31.04 | Defend/argue a project:** Presentation of the technical solution and justification of energy optimization choices.
+* **AC31.05 & AC33.02 | Collaborate in project mode:** Teamwork (3-4 students), task distribution (Gateway, End-Device, Server), and management of allocated time (27.5h).
+* **AC31.02 | Produce technical documentation:** Explanation of script functioning and architectural choices.
+
+## Personal Conclusion
+This project was a concrete opportunity to link embedded electronics (sensors, energy management) to the world of operator networks (LoRaWAN) and IT (MQTT, Node-RED). I particularly developed my skills in low-power IoT and system integration.
+
+**Source**: [Project Repository](https://github.com/RiasGFirst/SAE5.01)
