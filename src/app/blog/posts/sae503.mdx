@@ -1,0 +1,249 @@
+---
+title: "SAE5.03 Cloud-Native E-Commerce Application"
+publishedAt: "2026-01-12"
+summary: "Development of a cloud-native microservices e-commerce application for figurines with Kubernetes orchestration, MQTT event-driven communication, and automated deployment."
+tag: "IUT"
+---
+
+![](/images/projects/sae503/tjMbsEnQJ0SKa62E.png)
+
+## Project Overview
+
+As part of the SAE5.DevCloud.03 module, I participated in the development of a complete cloud-native e-commerce application dedicated to selling figurines. This project aimed to put into practice skills in microservices architecture, Kubernetes orchestration, and automated deployment. The application allows users to browse a catalog of figurines, manage their shopping cart, and place orders with automatic PDF invoice generation.
+
+## Technical Architecture
+
+### Microservices Architecture
+
+The application is built on a microservices architecture where each component is independent, deployed separately, and has its own database. This approach ensures scalability, maintainability, and system resilience.
+
+The solution consists of the following components:
+
+- **API Clients** (Node.js/Express.js) - User management, authentication, and favorites
+- **API Catalogue** (Python/FastAPI) - Product catalog management with filtering and sorting
+- **API Panier & Commandes** (.NET Core) - Shopping cart and order management with PDF generation
+- **Frontend Web** (Nuxt 3/TypeScript) - Single-page application with Vue.js and Shadcn
+- **MQTT Broker** (Mosquitto) - Asynchronous event-driven communication
+
+### Communication Patterns
+
+- **REST APIs** for synchronous communication between services
+- **MQTT** for asynchronous business event propagation (user deletion, stock updates)
+
+### My Contributions
+
+#### API Clients Development
+
+I was responsible for developing the **API Clients** service, which handles:
+
+- User registration and authentication with JWT tokens (24-hour validity)
+- Role management (client and administrator)
+- User favorites management
+- Publishing MQTT events when users are deleted
+
+**Technical Stack:**
+- **Language/Runtime:** Node.js
+- **Framework:** Express.js
+- **Database:** PostgreSQL
+- **Authentication:** JWT (JSON Web Tokens)
+
+#### Kubernetes Orchestration and Infrastructure
+
+I was also responsible for setting up and managing the entire Kubernetes infrastructure, including:
+
+- Cluster configuration and deployment with K3s
+- Creation of all Kubernetes manifests (Deployments, Services, Secrets, ConfigMaps)
+- Service discovery and networking configuration
+- Resource management and pod scheduling
+- Health checks and liveness/readiness probes configuration
+
+## Infrastructure and Deployment
+
+### Virtualization Environment
+
+The test and development infrastructure is deployed locally using Vagrant and VirtualBox. The Kubernetes cluster consists of three virtual machines:
+
+- **1 Master Kubernetes**
+  - Storage: 20 GB
+  - Processors: 2 vCPU
+  - Memory: 4096 MB RAM
+
+- **2 Workers (Slaves)**
+  - Storage: 15 GB each
+  - Processors: 1 vCPU each
+  - Memory: 2048 MB RAM each
+
+The cluster uses **K3s**, a lightweight Kubernetes distribution suitable for educational environments and limited resources.
+
+### Kubernetes Orchestration
+
+I was responsible for the complete Kubernetes orchestration of the application. Service orchestration is managed by Kubernetes using YAML manifests that I created and configured. The infrastructure includes:
+
+#### Kubernetes Resources
+
+- **Deployments**: Created deployments for all microservices (APIs, frontend, databases, and MQTT broker) with proper resource limits, environment variables, and health checks. Each deployment is configured with 3 replicas to ensure high availability and load distribution across the cluster nodes.
+
+- **Services**: Configured ClusterIP services for internal communication between pods, ensuring service discovery through DNS names. Each service exposes the appropriate ports and routes traffic to the corresponding pods using label selectors.
+
+- **Secrets**: Implemented Kubernetes Secrets to securely manage sensitive data such as:
+  - Database connection passwords (PostgreSQL, MySQL)
+  - JWT signing secrets for token generation and validation
+  - MQTT broker credentials
+
+- **ConfigMaps**: Used ConfigMaps for non-sensitive configuration data like:
+  - API endpoint URLs
+  - Service ports and names
+  - Environment-specific settings
+
+#### Cluster Management
+
+- **Node Management**: Configured the master node and two worker nodes, ensuring proper taint and toleration settings for pod scheduling
+- **Resource Allocation**: Set appropriate CPU and memory limits for each pod to prevent resource exhaustion
+- **Health Monitoring**: Implemented liveness and readiness probes to ensure automatic pod restart and traffic routing only to healthy instances
+- **Service Discovery**: Leveraged Kubernetes DNS for automatic service discovery, allowing services to communicate using their service names
+
+Each API, database, and the MQTT broker are deployed in distinct pods, ensuring clear service isolation and independent scaling capabilities.
+
+### Infrastructure Automation with Ansible
+
+I worked alongside Marcelin TRAG to implement infrastructure automation using Ansible. The Ansible playbooks automate:
+
+- **VM Provisioning**: Automated setup of the three virtual machines (1 master, 2 workers) with Vagrant
+- **K3s Installation**: Automated installation and configuration of K3s on all nodes
+- **Cluster Initialization**: Automated joining of worker nodes to the master node
+- **System Configuration**: Automated configuration of system dependencies, network settings, and required tools
+- **Idempotent Deployments**: Ensured that playbooks can be run multiple times without side effects
+
+This infrastructure-as-code approach ensures reproducible deployments and simplifies environment management across different development stages.
+
+### Continuous Integration and Deployment
+
+We implemented a complete CI/CD pipeline using GitHub Actions for automated Docker image creation and deployment. Each API has its own dedicated GitHub repository with its own CI pipeline:
+
+#### GitHub Actions Workflows
+
+- **Automatic Docker Image Building**: On every push to the main branch, GitHub Actions automatically:
+  - Builds Docker images from the Dockerfiles in each repository
+  - Tags images with commit SHA and branch name for versioning
+  - Pushes images to a container registry (Docker Hub or GitHub Container Registry)
+
+- **Multi-Stage Builds**: Optimized Dockerfiles use multi-stage builds to create lightweight production images, reducing image size and improving deployment speed
+
+- **Automated Testing**: Integration of automated tests in the CI pipeline before image building to ensure code quality
+
+- **Deployment Automation**: The generated Docker images are automatically available for deployment on the Kubernetes cluster, where they can be pulled and deployed using kubectl or automated deployment scripts
+
+This CI/CD setup ensures that every code change is automatically containerized and ready for deployment, significantly reducing manual intervention and deployment time.
+
+## Key Features
+
+### User Management
+
+- Account creation with email uniqueness verification
+- JWT-based authentication with 24-hour token validity
+- Role-based access control (client/administrator)
+- Favorites management for authenticated users
+- User deletion with MQTT event propagation for cache invalidation
+
+### Catalog Management
+
+- Public catalog browsing (authenticated or not)
+- Advanced filtering and sorting (by price, name, tags)
+- Tag-based categorization system
+- Administrator management interface for articles, tags, and promotions
+- Real-time stock synchronization via MQTT
+
+### Shopping Cart and Orders
+
+- Shopping cart management per user
+- Order creation and validation
+- Stock verification before order validation
+- Automatic PDF invoice generation using QuestPDF library
+- Order history consultation
+- Invoice regeneration capability
+
+## Event-Driven Communication
+
+The system uses MQTT for asynchronous communication to maintain data consistency between services:
+
+- **user.deleted** event: Published when a user is deleted, allowing the Cart API to cache the user ID for 24 hours to invalidate any subsequent token usage
+- **item.shopped** event: Published when an order is validated, containing ordered items and quantities, allowing the Catalog API to automatically decrement stock
+
+This event-driven architecture maintains data consistency when implementing service replication and high availability.
+
+## Security Implementation
+
+The security mechanisms implemented include:
+
+- JWT token authentication
+- User role management
+- Protection of sensitive endpoints
+- Database isolation per service
+- Secure storage of sensitive information via Kubernetes Secrets
+- Standalone JWT validation across APIs
+
+## Achievements
+
+This project allowed me to validate and develop the following key skills:
+
+### Cloud Architecture and Deployment
+- **AC24.01DevCloud**: Propose a Cloud solution suitable for the company
+- **AC24.02DevCloud**: Virtualize an environment
+- **AC25.02DevCloud**: Deploy an application into production
+- **AC25.03DevCloud**: Orchestrate services with Kubernetes
+
+### Microservices Development
+- Design and implement independent microservices
+- Implement RESTful APIs following industry standards
+- Manage service-to-service communication (synchronous and asynchronous)
+- Handle distributed authentication and authorization
+
+### DevOps and Automation
+- Containerize applications with Docker
+- Set up CI/CD pipelines with GitHub Actions for automated Docker image creation
+- Deploy and orchestrate services with Kubernetes (K3s)
+- Manage infrastructure as code with Vagrant and Ansible
+- Configure Kubernetes resources (Deployments, Services, Secrets, ConfigMaps)
+- Implement service discovery and networking in Kubernetes
+
+### Event-Driven Architecture
+- Implement asynchronous communication with MQTT
+- Design event-driven workflows
+- Ensure data consistency across distributed services
+
+## Technical Challenges and Solutions
+
+### Challenge: Token Revocation Without Centralized Management
+
+**Solution:** When a user is deleted, the API Clients publishes an MQTT event. The Cart API subscribes to this event and caches the deleted user's UUID for 24 hours. Any request with a JWT token from this user is immediately rejected, compensating for the lack of centralized JWT revocation.
+
+### Challenge: Real-Time Stock Synchronization
+
+**Solution:** When an order is validated, the Cart API publishes an MQTT event containing ordered items and quantities. The Catalog API consumes this event and automatically decrements stock, ensuring consistency across services.
+
+### Challenge: Multi-Framework Integration
+
+**Solution:** The microservices architecture allowed each team member to use their preferred framework (Node.js, Python, .NET Core), demonstrating the true independence of microservices and the flexibility of cloud-native architectures.
+
+## Personal Conclusion
+
+This project was an excellent opportunity to work on a complete cloud-native application, from development to deployment. I particularly developed my skills in:
+
+- Microservices architecture design and implementation
+- Kubernetes orchestration and service management (K3s cluster setup, manifest creation, resource management)
+- Infrastructure automation with Ansible
+- Event-driven architecture with MQTT
+- CI/CD pipeline automation with GitHub Actions for Docker image creation
+- Multi-service authentication and authorization
+- Container orchestration and service discovery
+
+Working in a team of four developers, each responsible for a different microservice, reinforced the importance of clear API contracts, documentation, and asynchronous communication patterns. The project successfully demonstrated the scalability and maintainability benefits of a well-designed microservices architecture.
+
+**Team Members:**
+- **Marcelin TRAG**: API Clients + Kubernetes orchestration + Ansible (infrastructure automation)
+- **Maël LEFEBVRE**: API Catalogue
+- **Kylian ADAM**: API Panier & Commandes + Kubernetes orchestration + Ansible (infrastructure automation)
+- **Anna MAUROY**: Frontend
+
+**Source**: [GitHub Organization](https://github.com/LesProsDevCloud)
+
