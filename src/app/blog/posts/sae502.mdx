@@ -1,0 +1,69 @@
+---
+title: "SAE5.02 Steering an IT Project – Krojanty"
+publishedAt: "2025-12-20"
+summary: "Professional project management and development of 'Krojanty', a sophisticated 9x9 board game in C. Featuring a GTK4 interface, networked multiplayer, and a Minimax AI with Alpha-Beta pruning, managed using SVN at ENSISA."
+tag: "IUT"
+---
+
+## Project Overview
+
+As part of the **SAE5.02 "Piloter un projet informatique"** module conducted at **ENSISA**, I led the development of **Krojanty**, a complex strategy board game. This project represented a significant milestone in my academic career, shifting the focus from purely technical implementation to the broader challenges of professional software project steering. The objective was to deliver a production-grade application that integrated low-level systems programming, graphical user interfaces, networked communications, and advanced algorithmic decision-making.
+
+Managing the development of Krojanty required a disciplined approach to the software development lifecycle. Working within the rigorous academic environment of ENSISA, I was responsible for translating high-level game specifications into a modular, maintainable, and highly optimized C codebase.
+
+## Technical Architecture & Implementation
+
+### A Modular Core in C
+
+The engine was developed from the ground up in **C**, prioritizing performance and minimal memory overhead—factors that were critical for the performance of our Artificial Intelligence. I designed the system with a strict separation between the core game logic and the various interaction layers. This modularity allowed us to maintain a single "source of truth" for game rules while supporting three distinct modes of operation:
+
+- **GTK4 Graphical Interface**: A modern, high-performance UI providing an intuitive experience for players.
+- **Console Interface**: A lightweight CLI mode used for rapid debugging and as a basis for our automated testing suite.
+- **Networked Multiplayer**: A custom socket-based protocol enabling competitive play over a local network or the internet.
+
+This decoupling ensured that the complex capture rules of Krojanty—**Linca** (a sandwich capture) and **Seultou** (a directional capture)—were implemented and tested once within the core engine, then seamlessly exposed to both local and remote players.
+
+### Algorithmic Strategy: Artificial Intelligence
+
+Implementing the AI opponent was one of the project's most technically demanding phases. To create a challenging adversary, I implemented a **Minimax algorithm** enhanced by **Alpha-Beta pruning**. The search efficiency was further optimized through:
+
+- **Zobrist Hashing**: Providing a fast and unique representation of board states to detect cycles and repeated positions.
+- **Transposition Tables**: Using memoization to cache evaluation results of previously explored branches, significantly increasing the search depth the AI could achieve within a reasonable time limit.
+
+## Project Steering & Version Control
+
+The "steering" aspect of this SAE was reinforced by the mandatory use of **SVN (Subversion)** for version control. While Git is the industry standard today, adapting to SVN's centralized model was a valuable exercise in understanding different collaboration workflows.
+
+Managing the project with SVN highlighted several critical project management principles:
+- **Centralized Coordination**: Unlike Git's distributed nature, SVN required heightened communication between team members to manage locks and avoid conflicts in the central repository.
+- **Commit Discipline**: Every update had to be carefully integrated, emphasizing the importance of frequent, atomic commits and descriptive messaging.
+- **Quality Assurance**: We integrated **Doxygen** for automatic documentation generation directly from the source code and maintained a dedicated **NOGUI test suite**. This suite allowed us to validate the game logic against hundreds of edge cases without the overhead of the graphical interface.
+
+## Competencies Validation
+
+### AC21.06: Work in a Team to Develop Professional Skills
+
+Leading the development of Krojanty at ENSISA allowed me to demonstrate professional leadership. By managing the transition from specification to a documented, tested, and delivered product, I validated my ability to coordinate technical tasks and maintain a high standard of quality throughout the project lifecycle.
+- **Evidence**: The comprehensive `Makefile` managing multiple build targets and the clear project structure separated into `include/`, `src/`, and `tests/`.
+
+### Software Engineering & Performance Optimization
+
+Developing a networked game with a competitive AI required mastery of several low-level computing domains. I successfully managed manual memory allocation, low-level socket programming for the network stack, and complex algorithmic optimizations for the AI engine.
+- **Evidence**: The implementation of the Zobrist-hashed transposition tables and the robust handling of asynchronous network events within the GTK4 main loop.
+
+### Adaptability & Tool Mastery
+
+The requirement to use SVN instead of Git demonstrated my ability to adapt to diverse technical environments and constraints. I successfully navigated the centralized workflow while maintaining the same level of productivity and safety as in distributed environments.
+- **Evidence**: The maintenance of a clean, stable SVN history and the successful integration of all project components under a centralized management model.
+
+## Conclusion
+
+The SAE5.02 project was a defining experience that bridged the gap between a student developer and a professional software engineer. Beyond the technical satisfaction of building a performant game engine and a sophisticated AI, the project taught me the value of rigorous steering, clear documentation, and disciplined version control. Delivering a complex system like Krojanty at ENSISA has prepared me for the realities of professional IT project management, where success is as much about the process as it is about the code.
+
+**Lead Developer & Project Management:**
+- **Marcelin TRAG**
+- **Others Persons**
+
+**Source**: [GitHub Repository (Mirror)](https://github.com/RiasGFirst/Krojanty)
+
+

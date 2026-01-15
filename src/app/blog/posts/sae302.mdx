@@ -1,42 +1,85 @@
 ---
-title: "SAE3.02 Developing communicating applications."
+title: "SAE3.02 Developing communicating applications"
 publishedAt: "2024-12-31"
-summary: ""
+summary: "Design and implementation of a scalable multi-server architecture for remote code compilation and execution. Features a PyQt6 graphical client, a custom application-layer protocol, and secure multi-threaded communication."
 tag: "IUT"
 ---
 
+## Project Overview
 
-## Overview
+In the framework of the **SAE3.02 "Développer des applications communicantes"** module, I designed and implemented a robust multi-server system for remote program compilation and execution. The project addresses the challenges of distributed computing by allowing clients to offload intensive tasks (compiling and running code in various languages) to a specialized server cluster.
 
-Developed a multi-server architecture designed to handle client requests for compiling and executing programs. The system efficiently manages load balancing across servers to ensure smooth and scalable execution, capable of handling multiple concurrent clients.
+The core of the system is a multi-threaded architecture capable of handling concurrent client requests while maintaining high availability through dynamic load balancing. This project required a deep mastery of low-level network programming, multi-threading synchronization, and system-level process management.
 
-## Key Features
+## Technical Architecture & Implementation
 
-- **Client-Server Interaction**: Graphical client interface for submitting programs and receiving results.
-- **Load Balancing**: Dynamic task delegation to secondary servers based on CPU usage and queue size.
-- **Concurrency**: Handles multiple client requests simultaneously.
-- **Socket Communication**: Robust communication between clients and servers, including error handling and reconnection mechanisms.
+### Client Interface: PyQt6 & Sockets
 
-## Technical Highlights
+I developed a sophisticated graphical user interface using **PyQt6**, providing an intuitive platform for developers to interact with the remote cluster. 
 
-- **Program Execution**: Supports multiple programming languages with necessary compilation tools.
-- **Resource Monitoring**: Tracks CPU and memory load for informed load balancing decisions.
-- **Security**: Implements authentication and encrypted communications for secure client-server exchanges.
+The client application manages:
+- **Session Lifecycle**: Secure authentication and persistent connection management via TCP sockets.
+- **Source Code Management**: Integrated file selection and preparation for transmission to the remote server.
+- **Real-time Feedback**: An asynchronous console interface that displays execution results and compilation logs as they are received from the cluster.
 
-## Achievements
+### Server Cluster & Load Balancing
 
-- Successfully implemented a scalable and robust multi-server system.
-- Developed a user-friendly client interface and efficient server-side functionalities.
-- Ensured dynamic scalability and effective load management for handling multiple clients and servers.
+The server-side infrastructure is built on a modular, multi-threaded architecture designed for scalability. I implemented a master-slave pattern to ensure efficient resource utilization:
 
-- **AC21.06** | Work in a team to develop professional skills
-- **AC22.05** | Ability to question an RT (Networks and Telecommunications) specification document
-- **AC23.02** | Develop an application from a given specification document for the Web or mobile devices
-- **AC23.03** | Use a network protocol to program a client/server application
-- **AC23.04** | Install and administer a data management system
-- **AC23.05** | Access a dataset from an application and/or a website
+- **Master Server**: Acts as the primary entry point, managing client connections and distributing tasks to the most suitable available worker.
+- **Worker Nodes**: Specialized compilation and execution environments that report their availability and resource load back to the master.
+- **Dynamic Load Balancing**: I implemented a delegation mechanism where the master server evaluates worker node load (CPU/Memory) to redirect client requests, preventing bottlenecks during peak usage.
 
+### Execution Engine: Multi-Language Support
 
+The system supports a variety of programming languages, including **C**, **C++**, **Java**, and **Python**. I developed specialized modules to handle the specificities of each environment:
 
-**Source**
-[Link to GitHub Repository](https://github.com/RiasGFirst/SAE302andR309)
+- **Compilation Services**: Automated invocation of system compilers (`gcc`, `g++`, `javac`) with capture of stderr/stdout for remote debugging.
+- **Sandboxed Execution**: Isolated process execution to ensure that user-submitted code does not compromise the host system.
+- **Result Streaming**: Efficient transmission of execution output back to the client via established socket channels.
+
+## Custom Communication Protocol
+
+A cornerstone of this project was the design and implementation of a **proprietary application-layer protocol** built directly on top of raw TCP sockets. Since standard protocols like HTTP were too overhead-heavy or lacked the necessary state management for our specific needs, I developed a custom command-based language to synchronize state between the client and the server cluster.
+
+### Handshake & Command Architecture
+
+The protocol utilizes a system of **synchronous tags** to manage the lifecycle of a request. This ensures that both ends of the connection are always in sync before large amounts of data (like source code) are transmitted. Key components include:
+
+- **Authentication Flow**: Using tags like `<CLIENT_AUTH>` and `<SEND_CLIENT_ID>`, the server validates credentials before transitioning the socket to a "ready" state.
+- **Service Negotiation**: Tags such as `<CLIENT_FILE>` and `<EXEC_FILE>` allow the client to request specific actions. The server responds with `<FILE_SERVICE>` or `<EXEC_FILE_READY>` only if the resources (compilers, workers) are available.
+- **Data Encapsulation**: To handle binary file transfers, I implemented a custom framing system where metadata (filename, size) is sent and acknowledged before the raw byte stream is transmitted, ending with an `<END>` marker to prevent socket hang-ups.
+
+### Robust Error Handling
+
+Designing a protocol from scratch meant accounting for every possible point of failure. I implemented:
+- **Timeout Management**: Preventing "zombie" connections from blocking worker threads if a client disconnects mid-handshake.
+- **State Validation**: If an unexpected tag is received, the protocol triggers an immediate `<CLIENT_DISCONNECT>`, protecting the server's state machine from corrupted data.
+- **Concurrency Synchronisation**: Using Python's `threading` and `socket` libraries, I ensured that these custom handshakes could happen simultaneously for multiple clients without blocking the main event loops.
+
+## Competencies Validation: Why I have these skills
+
+### AC23.03: Use a network protocol to program a client/server application
+
+I successfully designed and implemented a full-duplex, command-based communication protocol from scratch. By managing low-level socket state machines and ensuring atomic message delivery, I have proven my ability to build robust, distributed infrastructures.
+- **Concrete Evidence**: The custom tag-based handshake logic (`<CLIENT_AUTH>`, `<FILE_SERVICE>`) implemented across `serve.py` and `client.py`, which manages the entire transaction lifecycle without relying on external libraries.
+
+### AC23.02: Develop an application from a given specification document
+
+I translated high-level requirements into a functional multi-server system, making critical architectural decisions regarding load balancing and language-specific execution modules.
+- **Concrete Evidence**: The modular structure of the `server/utils` directory, featuring independent services for compilation (`compile_services.py`) and server health monitoring (`check_server.py`).
+
+### AC21.06: Work in a team to develop professional skills
+
+As part of this project, I demonstrated the ability to coordinate complex technical tasks, maintain clear documentation, and deliver a production-grade application within academic deadlines.
+- **Concrete Evidence**: The presence of an automated installation script (`install.sh`) and detailed documentation in the `docs/` folder, ensuring the system can be deployed and maintained by others.
+
+## Conclusion
+
+The SAE3.02 project was a significant milestone in my development as a software engineer. It allowed me to master the complexities of network communication and distributed systems while delivering a tool that provides tangible value for remote development. Successfully building a load-balanced compilation cluster reinforced my understanding of scalability, performance optimization, and robust system design.
+
+**Lead Developer:**
+- **Marcelin TRAG**
+
+**Source**: [GitHub Repository](https://github.com/RiasGFirst/SAE302andR309)
+

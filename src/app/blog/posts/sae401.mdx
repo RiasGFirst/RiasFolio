@@ -1,35 +1,140 @@
 ---
 title: "SAE4.01 Develop and deploy a microservice in a virtualized environment"
 publishedAt: "2025-05-10"
-summary: ""
+summary: "Development and deployment of a banking management application using microservices architecture with FastAPI backend, Django frontend, Docker containerization, and MySQL database in a virtualized environment."
 tag: "IUT"
 ---
 
-## Banking Management Interface – Cloud Development Project
+![](/images/projects/sae401/ddcnixwZEKFj864.png)
 
-As part of the **SAE4.DEVCLOUD.01** project at IUT de Colmar, I contributed to the design and implementation of a **banking management interface** based on a **microservices architecture**. The application provides account management, user authentication, and transaction validation by bank agents.
+![](/images/projects/sae401/dmkcbduydhSOZJZ546456.png)
 
-### Key Contributions
-- **Frontend Development**: Designed and implemented the user interface with a focus on seamless integration with backend services.  
-- **API Communication & Security**: Managed API requests and implemented **HTTP Basic Authentication** to ensure secure data exchanges.  
-- **Project Planning**: Structured tasks through a Gantt chart, ensuring clear task distribution within a two-person team.  
+## Project Overview
 
-### Technical Approach
-- **Microservices Architecture**: Each core feature was built as an independent service, improving scalability and maintainability.  
-- **REST APIs**: Enabled communication between services and frontend.  
-- **Cloud & Virtualization**: Deployed and tested microservices in virtualized cloud environments, using DevOps practices for continuous integration and delivery.  
-- **Network Automation**: Applied Infrastructure-as-Code methods to configure and manage networking efficiently.  
+As part of the **SAE4.DEVCLOUD.01** project at IUT de Colmar, I contributed to the design and implementation of a complete **banking management interface** based on a **microservices architecture**. This project involved developing a full-stack application with account management, user authentication, transaction processing, and validation workflows for bank agents. The application was deployed in a virtualized environment using Docker and Docker Compose, demonstrating modern cloud-native development practices.
 
-### Skills & Learning Outcomes
-This project validated several critical competencies:
-- Proposing scalable **cloud solutions** for enterprise needs.  
-- **Virtualizing environments** to simulate production.  
-- Leveraging **cloud services** for deployment and management.  
-- Developing, deploying, and maintaining **microservices**.  
-- Applying **DevOps practices** for continuous integration and deployment.  
-- Automating **network configuration** via code.  
+The project required close collaboration in a two-person team, where I was responsible for the frontend development while my teammate handled the backend API. This division of responsibilities allowed us to work in parallel while maintaining clear interfaces between our components.
 
-### Reflections
-The project strengthened both my **technical expertise** and my **team collaboration skills**. While microservices and cloud deployment enhanced flexibility and modularity, one of the main challenges was **team coordination**, which required careful planning and communication. These experiences will be invaluable for tackling future projects in evolving cloud environments.
+## Technical Architecture
 
-**Source**: [Project Repository](https://github.com/RiasGFirst/SAE4.DEVCLOUD.01)
+### Microservices Architecture
+
+The application follows a microservices architecture pattern where each component is independently deployable and scalable:
+
+- **Backend Service (FastAPI)**: RESTful API service handling business logic, data persistence, and authentication.
+- **Frontend Service (Django)**: Web interface for clients and bank agents to interact with the banking system.
+- **Database Service (MySQL)**: Centralized data storage for users, accounts, and transactions.
+- **Adminer Service**: Database administration interface for development and debugging.
+
+This architecture validates microservices competency through several key characteristics. Each service operates in its own Docker container, enabling independent scaling based on specific service demands. Communication between services occurs through well-defined REST APIs, ensuring loose coupling and service autonomy. This modular structure facilitates future expansion while allowing each component to evolve independently.
+
+### Backend Architecture (FastAPI)
+
+The backend was developed using FastAPI, a modern Python web framework chosen for its high performance and native asynchronous capabilities.
+
+**Technical Stack:**
+- **Framework**: FastAPI (Async/Await)
+- **ORM**: Tortoise ORM
+- **Database**: MySQL 9.3
+- **Security**: Passlib (SHA256-Crypt) & HTTP Basic Auth
+- **Tools**: Schwifty (IBAN), PDM (Package Management)
+
+The implementation leverages `async/await` throughout to handle concurrent requests efficiently. Database interactions are handled through Tortoise ORM, providing a clean abstraction over the MySQL store. Security is integrated at the core, with encrypted password storage and IBAN validation ensuring data integrity.
+
+The service manages the entire banking lifecycle: from user registration and automatic IBAN generation to complex transaction processing. A sophisticated validation workflow requires bank agents to approve withdrawals and transfers, while custom middleware maintains detailed audit trails of every API interaction.
+
+### Frontend Architecture (Django)
+
+I took the lead on developing the Django frontend, focusing on creating a robust and user-friendly portal for both clients and bank staff.
+
+**Key Features:**
+- **Role-Based Access**: Dedicated portals for clients and bank agents.
+- **Real-Time Integration**: Seamless communication with the FastAPI backend.
+- **Security**: Secure session management with HTTP Basic Auth integration.
+- **User Experience**: Intuitive dashboards for transaction management and account validation.
+
+The frontend acts as a bridge between the complex backend logic and the end-user. Using Django's template engine, I built dynamic views that consume the REST API. I focused heavily on error handling and state management to ensure that users receive immediate, clear feedback during sensitive operations like money transfers or account approvals.
+
+## Infrastructure and Virtualization
+
+### Docker Containerization
+
+The architecture is built on a container-first approach, where each service operates within its own isolated environment. This design ensures that frontend, backend, and database components remain decoupled, preventing dependency conflicts and simplifying the deployment lifecycle.
+
+- **Frontend Container**: Serves the Django application on port 80.
+- **Backend Container**: Runs the FastAPI application on port 8001.
+- **Database Container**: Manages a MySQL 9.3 instance on port 3306.
+- **Adminer Container**: Provides a lightweight database administration tool on port 8002.
+
+By virtualizing the entire stack, I ensured that the development environment is an exact replica of the production target. This isolation validates my competency in virtualization; containers can be versioned, scaled independently, and deployed consistently across any infrastructure without "works on my machine" issues.
+
+### Docker Compose & Network Automation
+
+To orchestrate these services, I utilized **Docker Compose** to define the infrastructure as code. This allows for an automated and reproducible setup where service dependencies are strictly managed through health checks—ensuring the frontend only starts once the backend is fully operational, and the backend only after the database is ready.
+
+The networking is strategically segmented into two tiers:
+- **`front-back` Network**: A public-facing segment connecting the user interface and API.
+- **`internals` Network**: A private, isolated segment for secure backend-to-database communication.
+
+This dual-network approach minimizes the attack surface by ensuring sensitive database traffic is never exposed to the external network. Service discovery is handled automatically via Docker's internal DNS, allowing components to communicate using service names instead of volatile IP addresses.
+
+## Development and Deployment Practices
+
+### Project Planning and API Integration
+
+A critical part of this project was the coordination between frontend and backend. I used a **Gantt chart** to map out dependencies and ensure that API contracts were established before any code was written. This systematic approach allowed for parallel development, where the Django frontend could be built against defined FastAPI endpoints without waiting for the full backend logic to be complete.
+
+The integration layer I developed in Django features:
+- **HTTP Basic Auth**: Secured communication using a standard authentication layer.
+- **Reusable API Clients**: Modular functions designed to handle various REST methods (GET, POST, DELETE).
+- **Graceful Error Handling**: Robust mechanisms to parse API responses and provide meaningful user feedback, even during service interruptions.
+
+### Security & DevOps
+
+Security was integrated as a primary requirement rather than an afterthought. We implemented industry-standard **SHA256-Crypt** hashing for passwords and strictly enforced the **principle of least privilege** through multi-stage validation workflows. From a DevOps perspective, the entire pipeline is automated: a single `docker compose up` command provisions the network, configures volumes for persistent data, and starts the synchronized services, demonstrating a professional-grade deployment workflow.
+
+## Competencies Validation
+
+### AC24.01DevCloud: Propose a Cloud Solution
+
+I designed a scalable architecture that reflects real-world enterprise needs. By choosing a microservices pattern, the system can scale its components independently.
+- **Evidence**: The multi-service `compose.yml` configuration and the implementation of health-check based dependency management.
+
+### AC24.02DevCloud: Virtualize an Environment
+
+I successfully virtualized the full application stack, ensuring total isolation and portability.
+- **Evidence**: Custom `Dockerfile` implementations for each service and volume management for database persistence.
+
+### AC25.01DevCloud: Deploy into Production
+
+The project is production-ready, featuring automated deployment and centralized configuration via environment variables.
+- **Evidence**: Implementation of persistent volumes, health monitoring, and a comprehensive README for deployment.
+
+### AC25.02DevCloud: Develop and Deploy a Microservice
+
+I developed the frontend as a standalone microservice that remains loosely coupled with the backend through standardized API contracts.
+- **Evidence**: A clean separation of frontend (Django) and backend (FastAPI) services, communicating solely via REST.
+
+### DevOps & Network Automation
+
+The project implements **Infrastructure as Code** by defining the entire stack in `compose.yml`, enabling one-command deployments and reproducible environments.
+- **Evidence**: Automated service discovery via Docker DNS and network isolation between the frontend and internal database segments.
+
+## Technical Challenges and Reflections
+
+Developing a distributed banking system presented several non-trivial hurdles. **Service synchronization** was a major focus; ensuring that the database was fully healthy before the backend attempted migrations required fine-tuning Docker health checks. Another challenge was the **parallel development** workflow. By strictly adhering to API contracts established in our planning phase, we were able to build the Django frontend and FastAPI backend simultaneously, using mock responses to validate UI behavior before the final integration.
+
+These experiences reinforced several key professional outcomes:
+- **Cloud Solutions**: Validated the ability to propose and implement scalable architectures.
+- **DevOps Culture**: Bridged the gap between development and operations through automated deployment.
+- **Secure Networking**: Implemented defense-in-depth through network segmentation and robust authentication.
+
+## Conclusion
+
+This project was a deep dive into the realities of microservices. It demonstrated that while a modular architecture adds complexity in terms of orchestration and communication, the benefits in scalability and maintenance are immense. Managing a full-stack deployment within a virtualized environment has prepared me for the challenges of production-scale cloud infrastructures, emphasizing the importance of Infrastructure-as-Code and clear team collaboration.
+
+**Team Members:**
+- **Marcelin TRAG** (Frontend & Orchestration)
+- **Anna Mauroy** (Backend API)
+
+**Source**: [GitHub Repository](https://github.com/RiasGFirst/SAE4.DEVCLOUD.01)

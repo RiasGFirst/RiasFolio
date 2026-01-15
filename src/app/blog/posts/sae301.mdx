@@ -1,45 +1,74 @@
 ---
-title: "SAE3.01 Implement a transmission system."
+title: "SAE3.01 Implement a transmission system"
 publishedAt: "2024-10-04"
-summary: ""
+summary: "Design and implementation of an end-to-end IoT ecosystem for smart home automation. Features real-time device control via ESP32, a centralized Django hub, and a dedicated Android application, all synchronized through the MQTT protocol."
 tag: "IUT"
 ---
 
-## Overview
-The project involved developing a comprehensive smart home automation system that integrates a mobile application, a web interface, and two connected smart plugs. The system allows users to control the smart plugs via the web or mobile application by sending and receiving MQTT messages on ESP devices.
+## Project Overview
 
-## Key Components
+In the framework of the **SAE3.01 "Mettre en œuvre un système de transmission"** module, I collaborated with **Corentin BOEGLIN** and **Richard MARTIN-RAKYTOVA** to develop a comprehensive smart home automation ecosystem. The project focused on the seamless integration of heterogeneous technologies—ranging from low-level embedded systems to high-level mobile and web platforms—to create a unified, real-time control system for IoT devices.
 
-1. **Mobile Application**
-   - Developed a user-friendly mobile app for seamless control of smart plugs.
-   - Implemented MQTT protocol for real-time communication with ESP devices.
+Our objective was to bridge the gap between physical hardware (smart plugs) and user interfaces, ensuring that a state change initiated on a smartphone would be instantaneously reflected on the web dashboard and executed by the physical hardware.
 
-2. **Web Interface**
-   - Built using Django, providing a robust and scalable backend.
-   - Enabled users to monitor and control smart plugs through a web browser.
+## Technical Architecture & Implementation
 
-3. **Smart Plugs**
-   - Integrated two smart plugs with ESP modules for connectivity.
-   - Ensured reliable communication through MQTT messaging.
+### Embedded Intelligence: ESP32 & C++
 
-## Technical Highlights
+At the heart of the physical layer, we deployed **ESP32 microcontrollers** programmed in **C++**. These modules were responsible for interacting with the environment and executing user commands.
 
-- **MQTT Protocol**: Utilized for efficient and real-time message transmission between devices.
-- **Django Framework**: Leveraged for developing a secure and scalable web interface.
-- **ESP Modules**: Deployed for seamless integration and control of smart plugs.
+The firmware implementation focused on two critical areas:
+- **Resilient Connectivity**: We developed a robust connection management system that ensures automatic reconnection to the WiFi infrastructure and the MQTT broker, minimizing downtime.
+- **Asynchronous Command Processing**: By leveraging the non-blocking nature of the MQTT client, the ESP32 could simultaneously monitor local sensor data and listen for incoming control messages, providing a highly responsive user experience.
 
-## Achievements
+### Centralized Management: Django & Docker
 
-- Successfully implemented a fully functional smart home automation system.
-- Enabled remote control of smart plugs via both mobile and web platforms.
-- Ensured robust and real-time communication through MQTT protocol.
+To manage the complexity of the IoT network, we built a centralized management hub using the **Django** framework. This server acts as the "brain" of the system, maintaining the global state and providing a unified entry point for administrative tasks.
 
-- **AC22.01** : Deploy and characterize complex transmission systems
-- **AC22.03** : Establish a multi-site connection via an operator network
-- **AC22.04** : Deploy operator access networks
-- **AC22.05** : Ability to question an RT (Networks and Telecommunications) specification document
+- **Platform Integration**: The backend integrates a persistent MQTT client that bridges synchronous web requests with the asynchronous publish/subscribe model of the IoT network.
+- **Deployment & Scalability**: The entire server environment was containerized using **Docker**, ensuring that the transmission system remains portable and easy to deploy across different hosting environments.
 
+### Portable Control: Android Application
 
+To complete the user experience, we developed a native **Android application** (provided as an `.apk`). This mobile client allows users to control their home environment from anywhere, utilizing the mobile network to transmit commands to the home infrastructure.
 
-**Source**
-[Link to GitHub](https://github.com/RiasGFirst/R3.01)
+- **Direct Synchronization**: The app communicates directly with the MQTT broker, allowing for sub-second latency when toggling devices.
+- **Bi-directional Feedback**: We implemented a reactive UI that updates in real-time based on status telemetry sent by the ESP32 modules, providing the user with immediate confirmation of their actions.
+
+## Communication Protocol: The Power of MQTT
+
+The backbone of the entire system is the **MQTT (Message Queuing Telemetry Transport)** protocol. We chose MQTT for its efficiency in low-bandwidth environments and its flexible publish/subscribe architecture.
+
+We designed a structured message pattern to optimize data transmission on a shared communication channel:
+- **Topic Architecture**: The system utilizes a unified channel (defined as `test` or `topic` in the firmware) where all devices and controllers exchange information.
+- **Action Commands**: User interfaces send targeted commands using the pattern `[DEVICE_ID]_ON`, `[DEVICE_ID]_OFF`, or `[DEVICE_ID]_TOGGLE` (e.g., `PRISE1_ON`).
+- **Status Telemetry**: ESP32 modules broadcast their heartbeat and state changes using the pattern `[DEVICE_ID]_ISON` or `[DEVICE_ID]_ISOFF`, ensuring that all controllers (Web and Mobile) remain perfectly synchronized with the actual physical state.
+- **State Requests**: A specialized `[DEVICE_ID]_STATE` command allows any controller to poll the current status of a device upon connection.
+
+## Competencies Validation: Why I have these skills
+
+### AC22.01: Deploy and characterize complex transmission systems
+
+I have mastered the implementation of multi-layered transmission chains. By successfully routing a command from an Android UI, through a remote MQTT broker, and finally to an ESP32 relay—all while maintaining data integrity—I have proven my ability to design and troubleshoot complex communication architectures.
+- **Concrete Evidence**: The implementation of the `mqtt_esp32` firmware and its successful handshake with the `mqtt_project` Django backend.
+
+### AC22.03: Establish a multi-site connection via an operator network
+
+This project demonstrated my ability to connect isolated local networks. By using an external MQTT broker, we enabled communication between the "Home" network (where the ESP32 resides) and the "Mobile" network (where the user is), effectively managing a multi-site transmission system over a public operator infrastructure.
+- **Concrete Evidence**: The system's ability to operate seamlessly regardless of whether the controlling device was on the same WiFi as the actuators or using a 4G/5G cellular connection.
+
+### AC22.05: Ability to question an RT specification document
+
+I proved my ability to translate high-level specifications into technical realities. We had to critically analyze the requirements for "real-time home automation" and select the most appropriate protocols (MQTT vs HTTP) and data formats (JSON) to meet the latency and reliability targets.
+- **Concrete Evidence**: The design of a custom MQTT topic structure and the decision to use a centralized Django database for state persistence alongside direct broker-to-client communication.
+
+## Conclusion
+
+The SAE3.01 project was a defining moment in my understanding of modern IoT transmission systems. It required a delicate balance between low-level hardware constraints and high-level software abstractions. Working in a team with Corentin and Richard taught me the importance of rigorous interface documentation and the power of collaborative problem-solving in a multi-platform environment.
+
+**Team Members:**
+- **Marcelin TRAG**
+- **Corentin BOEGLIN**
+- **Richard MARTIN-RAKYTOVA**
+
+**Source**: [GitHub Repository](https://github.com/RiasGFirst/R3.01)

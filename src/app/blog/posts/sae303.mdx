@@ -1,39 +1,341 @@
 ---
 title: "SAE3.03 Designing a multi-site computer network hosting virtualized services"
 publishedAt: "2025-01-18"
-summary: ""
+summary: "Design and implementation of a multi-site network architecture with advanced routing protocols (RIP, OSPF, BGP), VPN technologies (VPNv4, VRF), NAT, and virtualized services."
 tag: "IUT"
 ---
 
-## Instructions
+![](/images/projects/SAE3.03.png)
 
-Worked as part of a team to implement a multisite network using protocols such as RIP, OSPF, BGP, route reflector, vpnv4, VRF, and NAT.
+## Project Overview
 
-## Implementation
+As part of the SAE3.DevCloud.03 module, I worked as part of a team to design and implement a comprehensive multi-site computer network capable of hosting virtualized services. This project required deep understanding of advanced networking concepts, including dynamic routing protocols, VPN technologies, network virtualization, and service deployment across multiple geographically distributed sites.
 
-- **Multisite Network**: Designed and configured a multisite network architecture.
-- **Routing Protocols**: Implemented RIP, OSPF, and BGP for efficient routing across sites.
-- **Route Reflector**: Utilized route reflectors to optimize BGP configurations.
-- **VPN and VRF**: Configured vpnv4 and VRF for secure and isolated network segments.
-- **NAT**: Applied NAT for address translation and network security.
+The objective was to create a scalable, secure, and efficient network infrastructure that could interconnect multiple sites while providing isolation, redundancy, and optimal routing paths for various services.
 
-## Evidence
+![](/images/projects/SAE3.03-1.png)
 
-![SAE3.03](/images/projects/SAE3.03.png)
-![SAE3.03](/images/projects/SAE3.03-1.png)
+## Multi-Site Network Architecture
+
+### Network Design
+
+The project involved designing a complex multi-site network architecture that connects several geographically distributed locations. Key design considerations included:
+
+- **Site Interconnectivity**: Establishing reliable connections between multiple sites
+- **Redundancy**: Implementing failover mechanisms to ensure high availability
+- **Scalability**: Designing a network that can accommodate future growth
+- **Security**: Implementing isolation and secure communication between sites
+- **Performance**: Optimizing routing paths for efficient data transmission
+
+### Network Topology
+
+The architecture consisted of:
+- **Multiple Sites**: Each site representing a distinct network location with its own infrastructure
+- **Core Network**: Central routing infrastructure connecting all sites
+- **Edge Devices**: Routers and switches at each site handling local and inter-site traffic
+- **Service Infrastructure**: Virtualized services distributed across sites for load balancing and redundancy
+
+## Dynamic Routing Protocols
+
+### RIP (Routing Information Protocol)
+
+I implemented RIP as one of the routing protocols for internal network routing:
+
+- **Protocol Configuration**: Configured RIP version 2 for classless routing support
+- **Route Advertisement**: Set up automatic route advertisement between RIP-enabled routers
+- **Metric Management**: Configured hop count metrics for path selection
+- **Network Segmentation**: Used RIP for routing within specific network segments
+
+**Use Cases:**
+- Internal routing within smaller network segments
+- Backup routing protocol for redundancy
+- Simple dynamic routing for less critical paths
+
+### OSPF (Open Shortest Path First)
+
+OSPF was implemented as the primary Interior Gateway Protocol (IGP) for efficient routing:
+
+- **Area Configuration**: Designed and implemented OSPF areas for hierarchical routing
+  - Backbone area (Area 0) for core network connectivity
+  - Non-backbone areas for site-specific routing
+- **Link-State Database**: Configured OSPF to maintain link-state information
+- **Cost Metrics**: Set up cost-based path selection for optimal routing
+- **Authentication**: Implemented OSPF authentication for security
+- **Route Redistribution**: Configured redistribution between OSPF and other routing protocols
+
+**Advantages:**
+- Fast convergence after network changes
+- Efficient bandwidth utilization
+- Support for variable-length subnet masks (VLSM)
+- Hierarchical design reducing routing table size
+
+### BGP (Border Gateway Protocol)
+
+BGP was implemented for inter-site routing and external connectivity:
+
+- **AS Configuration**: Set up Autonomous System (AS) numbers for each site
+- **BGP Peering**: Established BGP peer relationships between sites
+- **Route Advertisement**: Configured BGP to advertise and receive routes
+- **Path Selection**: Implemented BGP path selection algorithms based on:
+  - AS path length
+  - Local preference
+  - MED (Multi-Exit Discriminator)
+  - Origin type
+- **Route Filtering**: Applied route filters and prefix lists for security and traffic control
+
+**BGP Features Implemented:**
+- eBGP for inter-AS routing between sites
+- iBGP for internal BGP routing within sites
+- Route reflectors for BGP scalability
+- BGP communities for route tagging and policy application
+
+### Route Reflector Configuration
+
+To optimize BGP configurations and reduce the complexity of full-mesh iBGP peering, I implemented route reflectors:
+
+- **Route Reflector Design**: Configured designated routers as route reflectors
+- **Client Configuration**: Set up BGP clients to peer with route reflectors instead of all other routers
+- **Cluster Configuration**: Organized route reflectors into clusters for redundancy
+- **Route Reflection Rules**: Configured route reflection to prevent routing loops
+- **Scalability**: Reduced the number of required BGP sessions from O(n²) to O(n)
+
+**Benefits:**
+- Reduced BGP peering complexity
+- Lower resource consumption
+- Easier management and troubleshooting
+- Maintained full routing information distribution
+
+## VPN and Network Virtualization
+
+### VPNv4 Configuration
+
+I implemented VPNv4 (MP-BGP VPN) for Layer 3 VPN services:
+
+- **MP-BGP Setup**: Configured Multiprotocol BGP extensions for VPN support
+- **Route Distinguisher (RD)**: Assigned unique RDs to each VPN instance
+- **Route Target (RT)**: Configured RTs for VPN route import/export policies
+- **VPN Route Distribution**: Set up VPN route advertisement between sites
+- **Address Family Configuration**: Enabled VPNv4 address family in BGP
+
+**VPNv4 Features:**
+- Multi-protocol support (IPv4, IPv6)
+- Scalable VPN architecture
+- Support for overlapping address spaces
+- Centralized VPN management
+
+### VRF (Virtual Routing and Forwarding)
+
+VRF was implemented to provide network isolation and multi-tenancy:
+
+- **VRF Instances**: Created multiple VRF instances for different services or customers
+- **Route Isolation**: Ensured complete routing table isolation between VRFs
+- **Interface Assignment**: Assigned interfaces to specific VRFs
+- **Inter-VRF Routing**: Configured controlled routing between VRFs when needed
+- **VRF-Aware Services**: Deployed services within specific VRF contexts
+
+**VRF Use Cases:**
+- Multi-tenant network isolation
+- Service separation (production, development, testing)
+- Customer-specific network segments
+- Security zone isolation
+
+### VPN and VRF Integration
+
+The combination of VPNv4 and VRF provided:
+
+- **End-to-End VPN Connectivity**: Secure connectivity between sites for specific services
+- **Address Space Overlap**: Support for overlapping IP addresses in different VPNs
+- **Scalable Multi-Site VPNs**: Efficient VPN deployment across multiple sites
+- **Service Isolation**: Complete isolation of services while sharing physical infrastructure
+
+## Network Address Translation (NAT)
+
+### NAT Implementation
+
+I configured NAT for address translation and network security:
+
+- **Static NAT**: Configured one-to-one address mapping for specific services
+- **Dynamic NAT**: Set up dynamic address translation for internal networks
+- **PAT (Port Address Translation)**: Implemented overload NAT for multiple internal addresses
+- **NAT Pool Configuration**: Defined address pools for NAT translation
+- **Access Control**: Applied NAT rules with access control lists (ACLs)
+
+**NAT Applications:**
+- Private to public address translation
+- Hiding internal network topology
+- Conserving public IP addresses
+- Enabling internet access for private networks
+
+### NAT in Multi-Site Context
+
+- **Site-Specific NAT**: Configured NAT policies per site
+- **Inter-Site NAT**: Managed NAT for communication between sites
+- **Service NAT**: Applied NAT rules for specific services
+- **NAT Troubleshooting**: Diagnosed and resolved NAT-related connectivity issues
+
+## Quality of Service (QoS) and Network Security
+
+### QoS Policy Configuration
+
+I implemented QoS policies to manage network traffic and ensure service quality:
+
+- **Traffic Classification**: Classified traffic based on protocols, ports, and applications
+- **Priority Queuing**: Configured priority queues for critical services
+- **Bandwidth Management**: Allocated bandwidth for different traffic types
+- **Traffic Shaping**: Implemented traffic shaping to control bandwidth usage
+- **QoS Policies**: Applied QoS policies at interface and global levels
+
+**QoS Benefits:**
+- Guaranteed bandwidth for critical services
+- Reduced latency for real-time applications
+- Improved network performance during congestion
+- Better user experience
+
+### Network Security Functions
+
+Security measures implemented included:
+
+- **Access Control Lists (ACLs)**: Configured ACLs for traffic filtering
+- **Firewall Rules**: Implemented firewall policies for network protection
+- **Authentication**: Set up authentication for routing protocols
+- **Encryption**: Configured encryption for VPN tunnels
+- **Intrusion Prevention**: Implemented basic intrusion prevention measures
+
+## Virtualized Services Deployment
+
+### Virtualization Environment
+
+I deployed virtualized solutions suitable for the multi-site network:
+
+- **Hypervisor Configuration**: Set up and configured hypervisors at each site
+- **Virtual Machine Deployment**: Created and deployed VMs for various services
+- **Resource Allocation**: Allocated CPU, memory, and storage resources
+- **Network Virtualization**: Configured virtual networks within virtualized environments
+- **Service Distribution**: Distributed services across sites for redundancy and load balancing
+
+### Service Deployment
+
+Advanced network services deployed included:
+
+- **Web Services**: Hosted web applications with load balancing
+- **Database Services**: Deployed database servers with replication
+- **DNS Services**: Configured DNS servers for name resolution
+- **DHCP Services**: Set up DHCP for automatic IP address assignment
+- **Monitoring Services**: Deployed network monitoring and management tools
+
+### High Availability
+
+- **Service Redundancy**: Implemented redundant services across sites
+- **Failover Mechanisms**: Configured automatic failover for critical services
+- **Load Balancing**: Distributed traffic across multiple service instances
+- **Health Monitoring**: Set up monitoring for service availability
+
+## Remote Access and Multi-Site Connectivity
+
+### Secure Remote Access
+
+I established secure remote access capabilities:
+
+- **VPN Tunnels**: Configured site-to-site VPN tunnels
+- **Remote User Access**: Set up remote access VPN for users
+- **Authentication**: Implemented strong authentication mechanisms
+- **Encryption**: Configured encryption for remote connections
+- **Access Control**: Applied access control policies for remote users
+
+### Operator Network Integration
+
+The project involved connecting sites via operator networks:
+
+- **WAN Connectivity**: Established WAN connections between sites
+- **Service Provider Integration**: Configured connections to service provider networks
+- **BGP with ISPs**: Set up BGP peering with Internet Service Providers
+- **Route Advertisement**: Advertised internal routes to service providers
+- **Internet Architecture Understanding**: Applied knowledge of Internet architecture and operator networks
+
+## Troubleshooting and Network Management
+
+### Dynamic Routing Troubleshooting
+
+I developed skills in troubleshooting dynamic routing issues:
+
+- **Routing Table Analysis**: Analyzed routing tables to identify issues
+- **Protocol Debugging**: Used protocol-specific debugging tools
+- **Route Advertisement Verification**: Verified route advertisement between routers
+- **Convergence Issues**: Diagnosed and resolved routing convergence problems
+- **Path Selection Analysis**: Analyzed path selection decisions
+
+**Troubleshooting Tools:**
+- `show ip route` / `show ipv6 route`
+- `show ip ospf database`
+- `show ip bgp summary`
+- `show ip bgp neighbors`
+- Protocol-specific debug commands
+- Traceroute and ping for path verification
+
+### Network Monitoring
+
+- **Performance Monitoring**: Monitored network performance metrics
+- **Traffic Analysis**: Analyzed network traffic patterns
+- **Alert Configuration**: Set up alerts for network issues
+- **Log Management**: Collected and analyzed network logs
+
+## Team Collaboration
+
+### Professional Skills Development
+
+Working in a team environment, I developed:
+
+- **Project Planning**: Participated in network design and planning sessions
+- **Task Distribution**: Collaborated on task assignment and coordination
+- **Documentation**: Created and maintained technical documentation
+- **Communication**: Communicated technical concepts to team members
+- **Problem Solving**: Collaborated on troubleshooting complex network issues
+- **Version Control**: Used version control for configuration management
+
+## Technical Challenges and Solutions
+
+### Challenge: BGP Scalability
+
+**Problem**: Full-mesh iBGP peering would require too many BGP sessions.
+
+**Solution**: Implemented route reflectors to reduce BGP peering complexity while maintaining full routing information distribution.
+
+### Challenge: Address Space Overlap
+
+**Problem**: Different sites or services needed to use overlapping IP address ranges.
+
+**Solution**: Implemented VRF and VPNv4 to provide complete address space isolation while maintaining connectivity.
+
+### Challenge: Routing Protocol Integration
+
+**Problem**: Multiple routing protocols (RIP, OSPF, BGP) needed to work together.
+
+**Solution**: Configured route redistribution with proper filtering and metric manipulation to ensure optimal routing.
+
+### Challenge: Service High Availability
+
+**Problem**: Services needed to remain available even if a site fails.
+
+**Solution**: Distributed services across multiple sites with automatic failover and load balancing mechanisms.
 
 ## Achievements
 
-- **Network Configuration**: Mastered the setup of complex network protocols and architectures.
-- **Routing Management**: Enhanced skills in managing dynamic routing protocols and route reflectors.
-- **Network Security**: Implemented secure networking practices using VPNs and NAT.
+This project allowed me to validate and develop the following key competencies:
 
-- **AC21.01** : Configure and troubleshoot dynamic routing in a network
-- **AC21.02** : Configure and explain a simple QoS policy and the basic functions of network security
-- **AC21.03** : Deploy client workstations and virtualized solutions suitable for a given situation
-- **AC21.04** : Deploy advanced network services
-- **AC21.05** : Identify operator networks and the architecture of the Internet
-- **AC21.06** : Work in a team to develop professional skills
-- **AC22.02** : Establish a secure remote access
-- **AC22.03** : Establish a multi-site connection via an operator network
-- **AC24.02DevCloud** : Virtualize an environment
+- **AC21.01** | Configure and troubleshoot dynamic routing in a network
+- **AC21.02** | Configure and explain a simple QoS policy and the basic functions of network security
+- **AC21.03** | Deploy client workstations and virtualized solutions suitable for a given situation
+- **AC21.04** | Deploy advanced network services
+- **AC21.05** | Identify operator networks and the architecture of the Internet
+- **AC21.06** | Work in a team to develop professional skills
+- **AC22.02** | Establish a secure remote access
+- **AC22.03** | Establish a multi-site connection via an operator network
+- **AC24.02DevCloud** | Virtualize an environment
+
+## Conclusion
+
+This SAE provided comprehensive hands-on experience in designing and implementing complex multi-site network architectures. The project successfully demonstrated the integration of multiple advanced networking technologies including dynamic routing protocols (RIP, OSPF, BGP), VPN technologies (VPNv4, VRF), NAT, QoS, and virtualized services.
+
+The skills acquired in routing protocol configuration, network virtualization, troubleshooting, and team collaboration form a solid foundation for enterprise-level network design and administration. This project highlighted the importance of understanding both theoretical networking concepts and their practical implementation in real-world scenarios.
+
+Working as part of a team reinforced the importance of clear communication, proper documentation, and collaborative problem-solving when dealing with complex network infrastructures.
